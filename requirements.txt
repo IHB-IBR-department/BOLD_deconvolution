@@ -1,0 +1,4 @@
+matplotlib
+nilearn
+scikit-learn
+numba
