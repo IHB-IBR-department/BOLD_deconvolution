@@ -10,7 +10,8 @@ from sklearn.linear_model import Ridge
 def ridge_deconvolution(BOLD: np.ndarray,
                         TR: float,
                         alpha: float = 0.005,
-                        NT: int = 16) -> np.ndarray:
+                        NT: int = 16,
+                        Hxb: np.ndarray = None) -> np.ndarray:
     """
     Deconvolves a preprocessed BOLD signal into neuronal time series
     based on discrete cosine set and ridge regression.
@@ -19,6 +20,7 @@ def ridge_deconvolution(BOLD: np.ndarray,
    :param TR: Time repetition, in seconds
    :param alpha:  Regularization parameter, defaults to 0.005
    :param NT: Microtime resolution (number of time bins per scan), defaults to 16
+   :param Hxb: discrete kernel for computing regression
    :return: Deconvolved neuronal time series
    """
 
@@ -50,7 +52,9 @@ def ridge_deconvolution(BOLD: np.ndarray,
 def ridge_regress_deconvolution(BOLD: np.ndarray,
                                 TR: float,
                                 alpha: float = 0.005,
-                                NT: int = 16) -> np.ndarray:
+                                NT: int = 16,
+                                xb: np.ndarray = None,
+                                Hxb: np.ndarray = None) -> np.ndarray:
     """
     Deconvolves a preprocessed BOLD signal into neuronal time series
     based on discrete cosine set and ridge regression.
@@ -67,6 +71,8 @@ def ridge_regress_deconvolution(BOLD: np.ndarray,
     :type alpha: float, optional
     :param NT: Microtime resolution (number of time bins per scan), defaults to 16
     :type NT: int, optional
+    :param Hxb: discrete kernel for computing regression
+    :type BOLD: numpy.ndarray (NxN)
     :return: Deconvolved neuronal time series
     :rtype: numpy.ndarray
 
@@ -82,20 +88,14 @@ def ridge_regress_deconvolution(BOLD: np.ndarray,
     N = len(BOLD)  # Scan duration, [dynamics]
     k = np.arange(0, N * NT, NT)  # Microtime to scan time indices
 
-    # Create canonical HRF in microtime resolution (identical to SPM cHRF)
-    t = np.arange(0, 32 + dt, dt)
-    hrf = gamma.pdf(t, 6) - gamma.pdf(t, NT) / 6
-    hrf = hrf / np.sum(hrf)
+    if xb is None and Hxb is not None:
+        raise ValueError("Both xb and Hxb should be specified, or neither of them")
+    if Hxb is None and xb is not None:
+        raise ValueError("Both xb and Hxb should be specified, or neither of them")
 
-    # Create convolved discrete cosine set
-    M = N * NT + 128
-    xb = dctmtx_numpy_vect(M, N)
+    if xb is None:
+        xb, Hxb = compute_xb_Hxb(N, NT, TR)
 
-    Hxb = np.zeros((N, N))
-    for i in range(N):
-        Hx = np.convolve(xb[:, i], hrf, mode='full')
-        Hxb[:, i] = Hx[k + 128]
-    xb = xb[128:, :]
 
     # Perform ridge regression
     C = np.linalg.solve(Hxb.T @ Hxb + alpha * np.eye(N), Hxb.T @ BOLD)
@@ -104,6 +104,26 @@ def ridge_regress_deconvolution(BOLD: np.ndarray,
     neuro = xb @ C
 
     return neuro.flatten()
+
+
+def compute_xb_Hxb(N: int, NT: int, TR: float) -> np.ndarray:
+    dt = TR / NT
+    k = np.arange(0, N * NT, NT)  # Microtime to scan time indices
+
+    # Create canonical HRF in microtime resolution (identical to SPM cHRF)
+    t = np.arange(0, 32 + dt, dt)
+    hrf = gamma.pdf(t, 6) - gamma.pdf(t, NT) / 6
+    hrf = hrf / np.sum(hrf)
+
+    # Create convolved discrete cosine set
+    M = N * NT + 128
+    xb = dctmtx_numpy_vect(M, N)
+    Hxb = np.zeros((N, N))
+    for i in range(N):
+        Hx = np.convolve(xb[:, i], hrf, mode='full')
+        Hxb[:, i] = Hx[k + 128]
+    xb = xb[128:, :]
+    return xb, Hxb
 
 
 def dctmtx(N: int, K: int, is_numba=False) -> np.ndarray:

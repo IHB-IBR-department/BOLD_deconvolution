@@ -3,7 +3,7 @@ import timeit
 import unittest
 import numpy as np
 from bold_deconvolution import ridge_regress_deconvolution, ridge_deconvolution
-from bold_deconvolution import dctmtx_numpy, dctmtx_numba, dctmtx_numpy_vect
+from bold_deconvolution import dctmtx_numpy, dctmtx_numba, dctmtx_numpy_vect, compute_xb_Hxb
 from scipy import io
 from scipy.stats import pearsonr
 import matplotlib.pyplot as plt
@@ -99,8 +99,20 @@ class TestRidgeRegressDeconvolution(unittest.TestCase):
         r = pearsonr(neuro_ridge, neuro_ridge_regress.flatten()).correlation
         plt.plot(neuro_ridge)
         plt.plot(neuro_ridge_regress)
+        plt.show()
 
-        self.assertIsNone(np.allclose(neuro_ridge_regress, neuro_ridge))
+        self.assertTrue(np.allclose(neuro_ridge_regress, neuro_ridge, atol=1e-01))
+
+    def test_equal_hxb(self):
+
+        neuro_ridge_regress = ridge_regress_deconvolution(self.BOLD, self.TR, self.alpha, self.NT)
+        xb, Hxb = compute_xb_Hxb(len(self.BOLD), self.NT, self.TR)
+        neuro_ridge_precomp = ridge_regress_deconvolution(self.BOLD, self.TR, self.alpha, self.NT, xb=xb, Hxb=Hxb)
+        plt.plot(neuro_ridge_regress )
+        plt.plot(neuro_ridge_precomp)
+        plt.show()
+
+        self.assertTrue(np.allclose(neuro_ridge_regress, neuro_ridge_precomp, atol=1e-05))
 
     def test_empty_input(self):
         # Test if the function raises ValueError for empty BOLD signal
