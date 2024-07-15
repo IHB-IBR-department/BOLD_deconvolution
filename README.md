@@ -43,3 +43,7 @@ neuro_ridge_precomp = ridge_regress_deconvolution(preprocessed_BOLD, TR, alpha, 
 
 
 ```
+
+## Notebook Example
+
+See usage example in TestFunctions.ipynb
