@@ -66,8 +66,8 @@ The *bold_deconvolution* function deconvolves a preprocessed BOLD signal into ne
 
 ## Basic usage
 ```matlab
-% Load neuronal PSY regressor and PPI regressor calculated by SPM PEB
-load(fullfile(pwd,'examples','01_Simulated_Block_Design_[TR_2s]_[NT_16].mat'))
+% Load preprocessed BOLD signal
+BOLD = load(preprocessed_BOLD.mat).
 
 % Setup variables
 TR = 2;                          % Time repetition, [s]
@@ -75,7 +75,7 @@ NT = 16;                         % Microtime resolution (number of time bins per
 alpha = 0.005;                   % Regularization parameter
 
 %% Run BOLD deconvolution function
-neuro = bold_deconvolution(preproc_BOLD_signal,TR,alpha,NT);
+neuro = bold_deconvolution(BOLD,TR,alpha,NT);
 
 ```
 
