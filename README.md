@@ -48,6 +48,10 @@ neural_time_series = ridge_regress_deconvolution(preprocessed_BOLD, TR, alpha, N
 
 ```
 
-## Notebook Example
+## Jupyter notebook example
 
 See usage example in [usage_example.ipynb](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/usage_example.ipynb)
+
+## MATLAB example
+
+See usage example in [usage_example.m](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/usage_example.ipynb)
