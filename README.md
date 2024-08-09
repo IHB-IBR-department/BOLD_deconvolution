@@ -1,13 +1,13 @@
 # fMRI BOLD signal deconvolution
  
 
-This repository provides [Python](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/python_code/bold_deconvolution.py) and [MATLAB](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/matlab_code/bold_deconvolution.m) functions to perform hemodynamic deconvolution of fMRI BOLD signals. The deconvolution process is based on temporal basis set (dy default: discrete cosine set) and ridge regression, converting preprocessed BOLD signals into neuronal time series.
+This repository provides [Python](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/python_code/bold_deconvolution.py) and [MATLAB](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/matlab_code/bold_deconvolution.m) functions to perform hemodynamic deconvolution of preprocessed BOLD signals into estimated neuronal time series. The deconvolution process is based on temporal basis set (dy default: discrete cosine set) and ridge regression.
 
-Function: **ridge_regress_deconvolution**
+## Python function: **ridge_regress_deconvolution**
 
 The **ridge_regress_deconvolution** function deconvolves a preprocessed BOLD signal into neuronal time series without using confound regressors (e.g., motion) and without performing whitening and temporal filtering. The input BOLD signal must already be preprocessed.
 
-## Parameters
+### Parameters
 **BOLD**(np.ndarray):
 Preprocessed BOLD signal (numpy array).
 
@@ -24,7 +24,7 @@ Preprocessed BOLD signal (numpy array).
 **Returns:** Deconvolved neuronal time series (np.ndarray)
 
 
-## Basic usage
+### Basic usage
 ```python
 import numpy as np
 from bold_deconvolution import ridge_regress_deconvolution,  compute_xb_Hxb
@@ -48,10 +48,10 @@ neural_time_series = ridge_regress_deconvolution(preprocessed_BOLD, TR, alpha, N
 
 ```
 
-## Jupyter notebook example
+## Jupyter notebook examples
 
 See usage example in [usage_example.ipynb](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/python_code/usage_example.ipynb)
 
-## MATLAB example
+## MATLAB examples
 
 See usage example in [usage_example.m](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/matlab_code/usage_example.m)
