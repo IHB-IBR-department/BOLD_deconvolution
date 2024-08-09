@@ -19,7 +19,9 @@ Preprocessed BOLD signal (numpy array).
 **alpha** (float, optional, default=0.005): Regularization parameter for ridge regression.
 
 **NT** (int, optional, default=16): Microtime resolution (number of time bins per scan).
+
 **xb** (np.ndarray, optional, default: discrete cosine set): Temporal basis set in microtime resolution.
+
 **Hxb**  (np.ndarray, optional, default: discrete cosine set convolved with canonical HRF): Convolved temporal basis set in scan resolution.
 
 **Returns** Neuronal time series (np.ndarray): The deconvolved neuronal time series.
@@ -39,7 +41,8 @@ alpha = 0.005
 
 neuronal_time_series = ridge_regress_deconvolution(BOLD=preprocessed_BOLD, TR=TR, alpha=alpha, NT=NT)
 
-# Precompute cosine basis set (e.g., to apply the same temporal basis set for multiple BOLD-signal time series)
+# If we deconvolve multiple BOLD-time series from the same session,
+# we can precompute cosine basis set to speed up computations (since we are using the same basis set for all time series)
 xb, Hxb = compute_xb_Hxb(len(preprocessed_BOLD), NT, TR)
 
 neuro_ridge_precomp = ridge_regress_deconvolution(preprocessed_BOLD, TR, alpha, NT, xb=xb, Hxb=Hxb)

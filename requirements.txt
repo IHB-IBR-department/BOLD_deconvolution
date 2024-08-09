@@ -1,4 +1,3 @@
-matplotlib
-nilearn
+numpy
 scikit-learn
-numba
+matplotlib
