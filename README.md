@@ -3,28 +3,23 @@
 
 This repository provides [Python](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/python_code/bold_deconvolution.py) and [MATLAB](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/matlab_code/bold_deconvolution.m) functions to perform hemodynamic deconvolution of preprocessed BOLD signals into estimated neuronal time series. The deconvolution process is based on temporal basis set (dy default: discrete cosine set) and ridge regression.
 
-## Python function: **ridge_regress_deconvolution**
+## Python function: *ridge_regress_deconvolution*
 
-The **ridge_regress_deconvolution** function deconvolves a preprocessed BOLD signal into neuronal time series without using confound regressors (e.g., motion) and without performing whitening and temporal filtering. The input BOLD signal must already be preprocessed.
+The *ridge_regress_deconvolution* function deconvolves a preprocessed BOLD signal into neuronal time series without using confound regressors (e.g., motion) and without performing whitening and temporal filtering. The input BOLD signal must already be preprocessed.
 
-### Parameters
+## Parameters
 **BOLD**(np.ndarray):
-Preprocessed BOLD signal (numpy array).
-
-**TR** (float): Time repetition in seconds.
-
-**alpha** (float, optional, default=0.005): Regularization parameter for ridge regression.
-
-**NT** (int, optional, default=16): Microtime resolution (number of time bins per scan).
-
-**xb** (np.ndarray, optional, default: discrete cosine set): Temporal basis set in microtime resolution.
-
-**Hxb**  (np.ndarray, optional, default: discrete cosine set convolved with canonical HRF): Convolved temporal basis set in scan resolution.
+Preprocessed BOLD signal (numpy array).<br />
+**TR** (float): Time repetition in seconds.<br />
+**alpha** (float, optional, default=0.005): Regularization parameter for ridge regression.<br />
+**NT** (int, optional, default=16): Microtime resolution (number of time bins per scan).<br />
+**xb** (np.ndarray, optional, default: discrete cosine set): Temporal basis set in microtime resolution.<br />
+**Hxb**  (np.ndarray, optional, default: discrete cosine set convolved with canonical HRF): Convolved temporal basis set in scan resolution.<br />
 
 **Returns:** Deconvolved neuronal time series (np.ndarray)
 
 
-### Basic usage
+## Basic usage
 ```python
 import numpy as np
 from bold_deconvolution import ridge_regress_deconvolution,  compute_xb_Hxb
@@ -51,6 +46,38 @@ neural_time_series = ridge_regress_deconvolution(preprocessed_BOLD, TR, alpha, N
 ## Jupyter notebook examples
 
 See usage example in [usage_example.ipynb](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/python_code/usage_example.ipynb)
+
+## MATLAB function: *bold_deconvolution*
+
+The *bold_deconvolution* function deconvolves a preprocessed BOLD signal into neuronal time series without using confound regressors (e.g., motion) and without performing whitening and temporal filtering. The input BOLD signal must already be preprocessed.
+
+## Parameters
+
+**BOLD**  - Preprocessed BOLD signal (time points X ROIs) <br />
+**TR**    - Time repetition, [s]
+
+*Optional:*
+
+**alpha** - Regularization parameter (default: 0.005)<br />
+**NT**    - Microtime resolution (number of time bins per scan)(default: 16)<br />
+**par**   - Parallel or sequential computations (default: 0)<br />
+**xb**    - Temporal basis set in microtime resolution (default: discrete cosine set)<br />
+**Hxb**   - Convolved temporal basis set in scan resolution (default: discrete cosine set convolved with canonical HRF)
+
+## Basic usage
+```matlab
+% Load neuronal PSY regressor and PPI regressor calculated by SPM PEB
+load(fullfile(pwd,'examples','01_Simulated_Block_Design_[TR_2s]_[NT_16].mat'))
+
+% Setup variables
+TR = 2;                          % Time repetition, [s]
+NT = 16;                         % Microtime resolution (number of time bins per scan)
+alpha = 0.005;                   % Regularization parameter
+
+%% Run BOLD deconvolution function
+neuro = bold_deconvolution(preproc_BOLD_signal,TR,alpha,NT);
+
+```
 
 ## MATLAB examples
 
