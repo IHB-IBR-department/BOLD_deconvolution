@@ -21,9 +21,7 @@ Preprocessed BOLD signal (numpy array).
 
 **Hxb**  (np.ndarray, optional, default: discrete cosine set convolved with canonical HRF): Convolved temporal basis set in scan resolution.
 
-**Returns**
-
-Neuronal time series (np.ndarray): The deconvolved neuronal time series.
+**Returns:** Neuronal time series (np.ndarray): The deconvolved neuronal time series.
 
 
 ## Basic usage
