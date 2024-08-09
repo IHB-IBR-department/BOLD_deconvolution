@@ -1,7 +1,7 @@
 # fMRI BOLD signal deconvolution
  
 
-This repository provides a Python function to perform hemodynamic deconvolution of fMRI BOLD signals. The deconvolution process is based on a discrete cosine set and ridge regression, converting preprocessed BOLD signals into neuronal time series.
+This repository provides Python and MATLAB functions to perform hemodynamic deconvolution of fMRI BOLD signals. The deconvolution process is based on a discrete cosine set and ridge regression, converting preprocessed BOLD signals into neuronal time series.
 
 Function: **ridge_regress_deconvolution**
 
@@ -50,8 +50,8 @@ neural_time_series = ridge_regress_deconvolution(preprocessed_BOLD, TR, alpha, N
 
 ## Jupyter notebook example
 
-See usage example in [usage_example.ipynb](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/usage_example.ipynb)
+See usage example in [usage_example.ipynb](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/python_code/usage_example.ipynb)
 
 ## MATLAB example
 
-See usage example in [usage_example.m](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/usage_example.ipynb)
+See usage example in [usage_example.m](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/matlab_code/usage_example.m)
