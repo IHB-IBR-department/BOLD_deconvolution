@@ -56,38 +56,11 @@ title('PPI regressors');
 fprintf(['Correlation between PPI terms calculated by SPM12 PEB and ridge regression, r = ' num2str(corr(ppi,spm_ppi)) '\n']);
 
 
-%% Run BOLD deconvolution function with precomputed discrete cosine set 
-% If we deconvolve multiple BOLD-time series from the same session,
-% we can precompute cosine basis set to speed up computations 
-% (since we are using the same basis set for all time series)
+%% Run BOLD deconvolution for multiple ROIs
 
 % Assume we have 400 ROIs 
 BOLD = repmat(preproc_BOLD_signal,1,400);  
 
-% Create SPM HRF in microtime resolution
-dt = TR/NT;                      % Length of time bin, [s]
-t = 0:dt:32;
-hrf = gampdf(t,6) - gampdf(t,NT)/6;
-hrf = hrf'/sum(hrf);
-
-% Create convolved discrete cosine set
-N = size(BOLD,1);                % Scan duration, [dynamics] 
-k = 1:NT:N*NT;                   % microtime to scan time indices
-M = N*NT + 128;
-n = (0:(M -1))';
-xb = zeros(size(n,1),N);
-xb(:,1) = ones(size(n,1),1)/sqrt(M);
-for j=2:N
-    xb(:,j) = sqrt(2/M)*cos(pi*(2*n+1)*(j-1)/(2*M));
-end
-
-Hxb = zeros(N,N);
-for i = 1:N
-    Hx       = conv(xb(:,i),hrf);
-    Hxb(:,i) = Hx(k + 128);
-end
-xb = xb(129:end,:);
-
-% Run BOLD deconvolution 
-par = 1;                         % Use parallel computations
-neuro_ts = bold_deconvolution(BOLD,TR,alpha,NT,par,xb,Hxb);
+% Use parallel computations 
+par = 1;                         
+neuro_ts = bold_deconvolution(BOLD,TR,alpha,NT,par);
