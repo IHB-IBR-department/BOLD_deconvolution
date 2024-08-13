@@ -1,7 +1,7 @@
 # fMRI BOLD signal deconvolution
  
 
-This repository provides [Python](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/python_code/bold_deconvolution.py) and [MATLAB](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/matlab_code/bold_deconvolution.m) functions to perform hemodynamic deconvolution of preprocessed BOLD signals into estimated neuronal time series. The deconvolution process is based on temporal basis set (dy default: discrete cosine set) and ridge regression.
+This repository provides [Python](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/python_code/bold_deconvolution.py) and [MATLAB](https://github.com/IHB-IBR-department/BOLD_deconvolution/blob/main/matlab_code/bold_deconvolution.m) functions to perform hemodynamic deconvolution of preprocessed BOLD signals into estimated neuronal time series. The deconvolution process is based on temporal basis set (dy default: discrete cosine set) and ridge regression. More details can be found in the [Masharipov et al. "Comparison of whole-brain task-modulated functional connectivity methods for fMRI task connectomics." bioRxiv (2024): 2024-01](https://doi.org/10.1101/2024.01.22.576622). If you employ this code, please cite the referenced study.
 
 ## Python function: *ridge_regress_deconvolution*
 
